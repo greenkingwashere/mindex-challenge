@@ -1,0 +1,287 @@
+{
+	"info": {
+		"_postman_id": "daa2f017-155f-4198-a250-bf89f8376da5",
+		"name": "Mindex challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12969987"
+	},
+	"item": [
+		{
+			"name": "Employee",
+			"item": [
+				{
+					"name": "Create employee",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"mostRecentEmployeeCreated\", pm.response.json().employeeId);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"const positions = [\"Director\", \"Intern\", \"Associate\", \"Manager\", \"Receptionist\"];\r",
+									"const departments = [\"Marketing\", \"Administration\", \"Sanitation\"];\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.collectionVariables.set(\"position\", positions[Math.floor(Math.random() * positions.length)]);\r",
+									"pm.collectionVariables.set(\"department\", departments[Math.floor(Math.random() * departments.length)]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"employeeId\":\"46ab14b3-7548-4c96-a73f-2f2077992ffb\",\r\n    \"firstName\": \"{{$randomFirstName}}\",\r\n    \"lastName\": \"{{$randomLastName}}\",\r\n    \"position\": \"{{position}}\",\r\n    \"department\": \"{{department}}\",\r\n    \"directReports\": [\r\n        {\r\n            \"firstName\": \"{{$randomFirstName}}\",\r\n            \"lastName\": \"{{$randomLastName}}\",\r\n            \"position\": \"Intern\",\r\n            \"department\": \"{{department}}\",\r\n            \"directReports\": [\r\n                {\r\n                    \"firstName\": \"{{$randomFirstName}}\",\r\n                    \"lastName\": \"{{$randomLastName}}\",\r\n                    \"position\": \"Understudy\",\r\n                    \"department\": \"{{department}}\",\r\n                    \"directReports\": []\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"firstName\": \"{{$randomFirstName}}\",\r\n            \"lastName\": \"{{$randomLastName}}\",\r\n            \"position\": \"Understudy\",\r\n            \"department\": \"{{department}}\",\r\n            \"directReports\": []\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{springURL}}/employee/",
+							"host": [
+								"{{springURL}}"
+							],
+							"path": [
+								"employee",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get employee by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{springURL}}/employee/:id",
+							"host": [
+								"{{springURL}}"
+							],
+							"path": [
+								"employee",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{mostRecentEmployeeCreated}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update employee",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"const positions = [\"Director\", \"Intern\", \"Associate\", \"Manager\", \"Receptionist\"];\r",
+									"const departments = [\"Marketing\", \"Administration\", \"Sanitation\"];\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.collectionVariables.set(\"position\", positions[Math.floor(Math.random() * positions.length)]);\r",
+									"pm.collectionVariables.set(\"department\", departments[Math.floor(Math.random() * departments.length)]);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"{{$randomFirstName}}\",\r\n    \"lastName\": \"{{$randomLastName}}\",\r\n    \"position\": \"{{position}}\",\r\n    \"department\": \"{{department}}\",\r\n    \"directReports\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{springURL}}/employee/:id",
+							"host": [
+								"{{springURL}}"
+							],
+							"path": [
+								"employee",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{mostRecentEmployeeCreated}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DirectReports",
+			"item": [
+				{
+					"name": "Get number of direct reports",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{springURL}}/reportingstructure/:id",
+							"host": [
+								"{{springURL}}"
+							],
+							"path": [
+								"reportingstructure",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{mostRecentEmployeeCreated}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Compensation",
+			"item": [
+				{
+					"name": "Create compensation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"mostRecentCompensationCreated\", pm.response.json().compensationId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"compensationId\": \"46ac14b3-7538-4c26-a73f-2f2077992gfb\",\r\n    \"employee\": {\r\n        \"employeeId\": \"{{mostRecentEmployeeCreated}}\",\r\n        \"firstName\": \"Bill\",\r\n        \"lastName\": \"Smith\",\r\n        \"position\": \"Intern\",\r\n        \"department\": \"Marketing\"\r\n    },\r\n    \"salary\": 25000,\r\n    \"effectiveDate\": \"12/25/2022\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{springURL}}/compensation",
+							"host": [
+								"{{springURL}}"
+							],
+							"path": [
+								"compensation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get compensation",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{springURL}}/compensation/:id",
+							"host": [
+								"{{springURL}}"
+							],
+							"path": [
+								"compensation",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{mostRecentCompensationCreated}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "springURL",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "mostRecentEmployeeCreated",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "department",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "position",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "mostRecentCompensationCreated",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
